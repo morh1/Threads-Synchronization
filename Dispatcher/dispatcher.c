@@ -10,10 +10,7 @@
 * Output: ---
 * Function Operation: init new Dispatcher
 ******************/
-Dispatcher*
-
-
-init_dispatcher(BQ** bqs,int arrSize){
+Dispatcher* init_dispatcher(BQ** bqs,UQ ** uqs,int arrSize,int unbounded_size){
     Dispatcher* d = (Dispatcher*)malloc(sizeof(Dispatcher));
     if (d == NULL) {
         printf("Memory allocation failed.\n");
@@ -21,18 +18,22 @@ init_dispatcher(BQ** bqs,int arrSize){
     }
     d->bqs = bqs;
     d->BQnum = arrSize;
+    for(int i=0;i<unbounded_size;i++){
+        d->uqs[i] = uqs[i];
+    }
 
     return d;
 }
 
 /******************
-* Function Name: init
-* Input: Producer** p
+* Function Name: sort
+* Input: Article* article,Dispatcher* d
 * Output: ---
-* Function Operation: init new Dispatcher
+* Function Operation: sort the articles by their category
 ******************/
 void sort(Article* article,Dispatcher* d){
-    if(article->end_flag != 0){
+    //printf("sort, producer id: %d article type:%d\n",article->producer_id,article->category);
+    if(article->end_flag == 0){
         switch (article->category) {
             case 1:
                 enqueue_unbounded(d->uqs[0],article);
@@ -43,28 +44,34 @@ void sort(Article* article,Dispatcher* d){
             case 3:
                 enqueue_unbounded(d->uqs[2],article);
                 break;
+            default:
+                break;
         }
     }
     else {
-        //update all qoueue that there is no more articles
+        //update all queue that there is no more articles
         enqueue_unbounded(d->uqs[0],article);
         enqueue_unbounded(d->uqs[1],article);
         enqueue_unbounded(d->uqs[2],article);
     }
 
 }
-void create_dispatcher_thread(Dispatcher* d){
-    pthread_t thread;
-    if (pthread_create(&thread, NULL, consume, (void*)d) != 0 ){
+
+/******************
+* Function Name: create_dispatcher_thread
+* Input: Dispatcher*
+* Output: ---
+* Function Operation: the function creates the dispatcher's threads
+******************/
+void create_dispatcher_thread(Dispatcher* d,pthread_t* threads){
+
+    if (pthread_create(&threads[d->BQnum], NULL, consume, (void*)d) != 0 ){
         printf("Failed to create thread\n");
         exit(-1);
     }
-    // Wait for the thread to finish
-    if (pthread_join(thread, NULL) != 0) {
-        printf("Failed to join thread\n");
-        exit(-1);
-    }
+
 }
+
 /******************
 * Function Name: consume
 * Input: void*

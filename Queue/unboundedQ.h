@@ -16,12 +16,10 @@ typedef struct UQ {
     Node* tail;
     pthread_mutex_t mutex;
     sem_t full;
-    int end_flag;
-
 } UQ;
 
 // Function declarations
-UQ* init_unbounded(int capacity);
+UQ* init_unbounded();
 void enqueue_unbounded(UQ* queue, Article* item);
 Article * dequeue_unbounded(UQ* queue);
 #endif //EX3_UNBOUNDEDQ_H

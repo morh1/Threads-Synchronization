@@ -110,7 +110,6 @@ Article * dequeue_bounded(BQ* queue) {
     Node* tempNode = queue->head;
     //update the queue (critical code)
     queue->head = queue->head->next;
-    free(tempNode);
     queue->count--;
 
     pthread_mutex_unlock(&queue->mutex);

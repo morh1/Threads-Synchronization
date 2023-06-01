@@ -18,7 +18,7 @@ typedef struct Producer {
 
 // Function declarations
 Producer** create_producer(int v1,int v2, int v3, Producer** p, int arrSize);
-void create_threads( int arrSize,Producer** p);
+void create_threads( int arrSize,Producer** p,pthread_t* threads);
 void* produce(void* arg);
 void delete_allocation(int arrSize,Producer** producer);
 Article* create_article(Producer* p,int end_flag);

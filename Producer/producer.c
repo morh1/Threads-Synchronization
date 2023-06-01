@@ -28,8 +28,7 @@ void* produce(void* arg){
 * Output:  ---
 * Function Operation: creates the producers threads
 ******************/
-void create_threads(int arrSize ,Producer** producers){
-    pthread_t threads[arrSize];  // Declare an array of pthread_t variables
+void create_threads(int arrSize ,Producer** producers,pthread_t* threads){
     //create a thread to every producer
     for (int i = 0; i < arrSize; i++){
         // Create a new thread and pass the thread number as an argument
@@ -37,10 +36,7 @@ void create_threads(int arrSize ,Producer** producers){
             printf("Failed to create thread\n");
             exit(-1);
         }
-        // Wait for the thread to finish
-//        if (pthread_join(threads[i], NULL) != 0) {
-//            printf("Failed to join thread\n");
-//            exit(-1);}
+
    }
 
 }
@@ -62,6 +58,7 @@ Article* create_article(Producer* p,int end_flag){
         article->end_flag = 1;
         return article;
     }
+    article->end_flag = 0;
     category = (rand() % 3) + 1;
     article->category = category;
     switch (category) {

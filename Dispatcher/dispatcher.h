@@ -13,13 +13,14 @@
 //Define the producer's struct
 typedef struct Dispatcher {
     BQ** bqs;
-    UQ** uqs;
+    //for 3 categories
+    UQ* uqs[3];
     int BQnum;
 
 } Dispatcher;
 void insert(UQ* bq,Article* article);
-Dispatcher* init_dispatcher(BQ** b,int arrSize);
+Dispatcher* init_dispatcher(BQ** b,UQ** u,int arrSize,int caregories);
 void sort(Article* article,Dispatcher* d);
 void* consume(void* arg);
-void create_dispatcher_thread(Dispatcher* d);
+void create_dispatcher_thread(Dispatcher* d,pthread_t* treads);
 #endif //EX3_DISPATCHER_H

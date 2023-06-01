@@ -1,5 +1,5 @@
 #include "unboundedQ.h"
-UQ* init_unbounded(int capacity){
+UQ* init_unbounded(){
     UQ* queue = (UQ*) malloc(sizeof(UQ));
     if (queue == NULL) {
         printf("Memory reallocation failed.\n");
@@ -26,10 +26,10 @@ UQ* init_unbounded(int capacity){
 void enqueue_unbounded(UQ* queue, Article* article){
 
     Node* item = createNode(article);
+
     //lock the mutex (prevent insertion and takeout at the same time)
     pthread_mutex_lock(&queue->mutex);
-
-    if(!queue->head){
+    if(queue->head == NULL){
         queue->head = item;
         queue->tail = item;
 
@@ -43,6 +43,7 @@ void enqueue_unbounded(UQ* queue, Article* article){
     pthread_mutex_unlock(&queue->mutex);
     sem_post(&queue->full);
     //printf(" insert, producer id: %d article type:%d\n",article->producer_id,queue->head->article->category);
+
 }
 Article * dequeue_unbounded(UQ* queue){
 
@@ -50,14 +51,12 @@ Article * dequeue_unbounded(UQ* queue){
     //lock the mutex (prevent insertion and takeout at the same time)
     pthread_mutex_lock(&queue->mutex);
 
-    Article* tempArticle = queue->head->article;
     //printf("removing, producer id: %d article type:%d\n",queue->head->article->producer_id,queue->head->article->category);
     Node* tempNode = queue->head;
     //update the queue (critical code)
     queue->head = queue->head->next;
-    free(tempNode);
 
     pthread_mutex_unlock(&queue->mutex);
 
-    return tempArticle;
+    return tempNode->article;
 }
