@@ -3,8 +3,8 @@
 
 /******************
 * Function Name: init
-* Input: ---
-* Output:  BQ,int
+* Input: int capacity
+* Output:  BQ
 * Function Operation: crete init bounded queue on the heap
 ******************/
 BQ* init_bounded(int capacity){
@@ -75,7 +75,7 @@ void enqueue_bounded(BQ* queue, Article* article) {
     //lock the mutex (prevent insertion and takeout at the same time)
     pthread_mutex_lock(&queue->mutex);
 
-    if(!queue->head){
+    if(queue->head == NULL){
         queue->head = item;
         queue->tail = item;
 
@@ -90,13 +90,13 @@ void enqueue_bounded(BQ* queue, Article* article) {
 
     pthread_mutex_unlock(&queue->mutex);
     sem_post(&queue->full);
-    //printf(" insert, producer id: %d article type:%d\n",article->producer_id,queue->head->article->category);
+
 }
 
 /******************
-* Function Name: dequeue
+* Function Name: dequeue_bounded
 * Input: BQ* queue
-* Output:  Node*
+* Output:  Article*
 * Function Operation: remove and return the first Node's Article from the head of the queue (fifo)
 ******************/
 Article * dequeue_bounded(BQ* queue) {
@@ -106,11 +106,11 @@ Article * dequeue_bounded(BQ* queue) {
     pthread_mutex_lock(&queue->mutex);
 
     Article* tempArticle = queue->head->article;
-    //printf("removing, producer id: %d article type:%d\n",queue->head->article->producer_id,queue->head->article->category);
     Node* tempNode = queue->head;
     //update the queue (critical code)
     queue->head = queue->head->next;
     queue->count--;
+    free(tempNode);
 
     pthread_mutex_unlock(&queue->mutex);
     sem_post(&queue->empty);

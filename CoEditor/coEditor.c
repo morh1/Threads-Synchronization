@@ -1,7 +1,6 @@
 //
 // Created by mor on 6/1/23.
 //
-
 #include "coEditor.h"
 
 /******************
@@ -22,8 +21,8 @@ CoEditor* init_coEditor(BQ* boundedQ,UQ* unboundedQ){
     return coEditor;
 }
 /******************
-* Function Name: create_dispatcher_thread
-* Input: CoEditor** coEditors,int arrSize
+* Function Name: create_co_editor_thread
+* Input: CoEditor**,int,pthread_t* ,int
 * Output: ---
 * Function Operation: the function creates the co-editor's threads
 ******************/
@@ -41,9 +40,9 @@ void create_co_editor_thread(CoEditor** coEditors,int arrSize,pthread_t* threads
 
 /******************
 * Function Name: edit
-* Input: Article* article,Dispatcher* d
+* Input: void* arg
 * Output: ---
-* Function Operation: sort the articles by their category
+* Function Operation: edit the articles
 ******************/
 void* edit(void* arg){
     int counter=0;

@@ -1,4 +1,11 @@
 #include "unboundedQ.h"
+
+/******************
+* Function Name: init_unbounded
+* Input: ---
+* Output: UQ*
+* Function Operation: init unbounded queue on the heap
+******************/
 UQ* init_unbounded(){
     UQ* queue = (UQ*) malloc(sizeof(UQ));
     if (queue == NULL) {
@@ -42,9 +49,15 @@ void enqueue_unbounded(UQ* queue, Article* article){
     }
     pthread_mutex_unlock(&queue->mutex);
     sem_post(&queue->full);
-    //printf(" insert, producer id: %d article type:%d\n",article->producer_id,queue->head->article->category);
 
 }
+
+/******************
+* Function Name: dequeue_unbounded
+* Input: UQ* queue
+* Output:  Article*
+* Function Operation: remove and return the first Node's Article from the head of the queue (fifo)
+******************/
 Article * dequeue_unbounded(UQ* queue){
 
     sem_wait(&queue->full);

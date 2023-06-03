@@ -132,6 +132,7 @@ int flow_control(char* path){
     create_dispatcher_thread(dispatcher,&threads);
     BQ* manager_boundedQ = init_bounded(managerQSize);
     CoEditor** coEditors = create_co_editor_arr(uq,manager_boundedQ);
+
     create_co_editor_thread( coEditors, CATEGORIES_NUM,&threads,producersCounter);
     ScreenManager* screen_manager = init_screen_manager(manager_boundedQ);
     create_screen_manager_thread(screen_manager,threads,threadsNum-1);

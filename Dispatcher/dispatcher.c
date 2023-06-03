@@ -76,7 +76,7 @@ void create_dispatcher_thread(Dispatcher* d,pthread_t* threads){
 * Function Name: consume
 * Input: void*
 * Output: ---
-* Function Operation: the function consume the articles frome the bounded queues in round robin alg
+* Function Operation: the function consume the articles from the bounded queues in round robin alg
 ******************/
 void* consume(void* arg){
     Dispatcher* d = (Dispatcher*)arg;
@@ -85,9 +85,10 @@ void* consume(void* arg){
     int position = 0;
     Article* empty_article;
 
+    //all the queues are empty
     while(completed != d->BQnum)
     {
-
+        // implements round robin alg
         while(d->bqs[position] == NULL){
             position = (position+1)%(d->BQnum);
         }
@@ -101,6 +102,7 @@ void* consume(void* arg){
         else{
            sort(article,d);
         }
+        //move to the next
         position = (position+1)%(d->BQnum);
     }
     sort(empty_article,d);

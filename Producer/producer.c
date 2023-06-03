@@ -24,7 +24,7 @@ void* produce(void* arg){
 
 /******************
 * Function Name: create_threads
-* Input:int ,Producer**
+* Input:int ,Producer**,pthread_t*
 * Output:  ---
 * Function Operation: creates the producers threads
 ******************/
@@ -41,8 +41,8 @@ void create_threads(int arrSize ,Producer** producers,pthread_t* threads){
 
 }
 /******************
-* Function Name: creator
-* Input: Producer* p
+* Function Name: create_article
+* Input: Producer* p,int end_flag
 * Output:  Article*
 * Function Operation: create the articles
 ******************/
@@ -59,6 +59,7 @@ Article* create_article(Producer* p,int end_flag){
         return article;
     }
     article->end_flag = 0;
+    //rand a category
     category = (rand() % 3) + 1;
     article->category = category;
     switch (category) {
