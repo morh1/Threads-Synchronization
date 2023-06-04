@@ -64,7 +64,6 @@ Article * dequeue_unbounded(UQ* queue){
     //lock the mutex (prevent insertion and takeout at the same time)
     pthread_mutex_lock(&queue->mutex);
 
-    //printf("removing, producer id: %d article type:%d\n",queue->head->article->producer_id,queue->head->article->category);
     Node* tempNode = queue->head;
     //update the queue (critical code)
     queue->head = queue->head->next;
